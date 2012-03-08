@@ -1,0 +1,52 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          jungledisk
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: control jungledisk
+### END INIT INFO
+
+# Written by Kevin Swanson 
+
+JD_BIN=/usr/bin/jungledisk
+JD_SETTINGS=/etc/jungledisk-settings-odeit.xml
+
+. /lib/lsb/init-functions
+
+case "$1" in
+	start)
+		log_daemon_msg "Starting Jungledisk daemons"
+		start-stop-daemon --exec $JD_BIN --start -- --config $JD_SETTINGS
+
+		log_end_msg 0
+		;;
+	stop)
+		log_daemon_msg "Stopping Jungledisk daemons"
+		start-stop-daemon --exec $JD_BIN --signal QUIT --stop
+
+		log_end_msg 0
+		;;
+	restart|force-reload)
+		$0 stop
+		sleep 5
+		$0 start
+		;;
+	start-backup)
+		$0 stop
+		sleep 5
+
+		log_daemon_msg "Starting Jungledisk daemons and backup job"
+		start-stop-daemon --exec $JD_BIN --start -- -b --config $JD_SETTINGS
+
+		log_end_msg 0
+
+		;;
+	*)
+		echo "Usage: /etc/init.d/jungledisk {start|stop|restart|force-reload|start-backup}"
+		exit 1
+		;;
+esac
+
+exit 0
+

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+<configEncryptionKey>38f78c4fdf84566a01a4f17dfbe41211</configEncryptionKey>
+<GlobalConfig modified="1">
+<proxyServer>
+<enabled>0</enabled>
+<proxyServer></proxyServer>
+<userName></userName>
+<password></password>
+</proxyServer>
+<listenPort>2667</listenPort>
+<cacheDirectory>/s3/cache/</cacheDirectory>
+<logDuration>0</logDuration>
+<largeWindows>0</largeWindows>
+<useSSL>1</useSSL>
+<loginAccount>
+<userName>redden96@yahoo.com</userName>
+<password>ENCRYPTED:MWI4MTk4MjMyZGI1ODRiYWZmMDczMzU4YWQwZDlhNWQxMWIwYmFlY2d0OH6TtFqKLA==</password>
+<domain></domain>
+</loginAccount>
+<enableUpdateCheck>1</enableUpdateCheck>
+<passwordPrompt>0</passwordPrompt>
+<securityFlags>0</securityFlags>
+<computerName></computerName>
+<useFileSystemDriver>1</useFileSystemDriver>
+<uploadLimit>
+<enableLimit>0</enableLimit>
+<rateLimit>200</rateLimit>
+<limitTimeRange>0</limitTimeRange>
+<startTime>0</startTime>
+<endTime>0</endTime>
+</uploadLimit>
+<downloadLimit>
+<enableLimit>0</enableLimit>
+<rateLimit>200</rateLimit>
+<limitTimeRange>0</limitTimeRange>
+<startTime>0</startTime>
+<endTime>0</endTime>
+</downloadLimit>
+<amazonAccounts>
+<value>
+<amazonAccount>
+<accessKey>0VXY9P0AAT790KB7VA82</accessKey>
+<secretKey>ENCRYPTED:Zjg0MDlmMjUyYWY5NTc0ZTk5NmYzYjY0YmY3NjQzYmM0NjRlZDI0NlZsNkm1sSnfWvPyVYtNp8dfdUdJPkFol6dg9kh9zzP6976BxtmvE8I=</secretKey>
+<nickname>Ode Consulting S3</nickname>
+</amazonAccount>
+</value>
+</amazonAccounts>
+<buckets modified="1">
+<value>
+<BucketConfig modified="1">
+<bucketName>jd2-13f5014ec9a774c482e039af63a435b0-us/odeit</bucketName>
+<bucketID>1</bucketID>
+<accountType>0</accountType>
+<accessKey>0VXY9P0AAT790KB7VA82</accessKey>
+<secretKey></secretKey>
+<cacheCheckInterval>120</cacheCheckInterval>
+<maxCacheSize>1000</maxCacheSize>
+<retryCount>3</retryCount>
+<asyncOperations>1</asyncOperations>
+<uploadDsstore>0</uploadDsstore>
+<encryptionKey></encryptionKey>
+<decryptionKeys></decryptionKeys>
+<useFastCopy>1</useFastCopy>
+<uploadResume>1</uploadResume>
+<deltaUpdates>1</deltaUpdates>
+<plusFallback>0</plusFallback>
+<archiveFlag>3</archiveFlag>
+<archiveConfig>
+<archiveUpdated>1</archiveUpdated>
+<archiveDeleted>1</archiveDeleted>
+<maxArchiveSize>100</maxArchiveSize>
+<maxArchiveCount>10</maxArchiveCount>
+<enableExcludeTypes>0</enableExcludeTypes>
+<enableExcludeFolders>0</enableExcludeFolders>
+<archiveExcludeTypes></archiveExcludeTypes>
+<archiveExcludeFolders></archiveExcludeFolders>
+</archiveConfig>
+<archiveCleanupConfig>
+<minArchiveCount>0</minArchiveCount>
+<archiveDuration>60</archiveDuration>
+</archiveCleanupConfig>
+<networkDrive modified="1">
+<mapDrive></mapDrive>
+<mountVolume></mountVolume>
+<mountPath modified="1">/s3/odeit -o allow_other -o rw -o umask=000 -o default_permissions</mountPath>
+</networkDrive>
+<localhostDriveMapping>0</localhostDriveMapping>
+<licenseData></licenseData>
+<archivePath>/~VersionArchive</archivePath>
+<bucketAccess>3</bucketAccess>
+<backupJobs>
+<value>
+<BackupJobConfig>
+ <jobName>My Backup</jobName>
+ <enabled>1</enabled>
+ <backupJobGUID>01b5331b150897b3</backupJobGUID>
+<schedule>
+ <interval>5</interval>
+ <dayOfWeek>0</dayOfWeek>
+ <hourOfDay>0</hourOfDay>
+ <minOfHour>0</minOfHour>
+ </schedule>
+ <maxBackupMin>0</maxBackupMin>
+ <runMissedAsap>0</runMissedAsap>
+ <wakeFromSleep>1</wakeFromSleep>
+ <autoCleanup>0</autoCleanup>
+ <useSnapshots>0</useSnapshots>
+ <ignoreTZChanges>0</ignoreTZChanges>
+ <customArchiveConfig>0</customArchiveConfig>
+<archiveConfig>
+ <archiveUpdated>1</archiveUpdated>
+ <archiveDeleted>1</archiveDeleted>
+ <maxArchiveSize>100</maxArchiveSize>
+ <maxArchiveCount>0</maxArchiveCount>
+ <enableExcludeTypes>0</enableExcludeTypes>
+ <enableExcludeFolders>0</enableExcludeFolders>
+ <archiveExcludeTypes/>
+ <archiveExcludeFolders/>
+ </archiveConfig>
+<backupDirectories>
+<value>
+<BackupDirectoryConfig>
+ <directoryName>/svn</directoryName>
+ <includeSubdirs>1</includeSubdirs>
+ <basePath>/</basePath>
+ <fileList/>
+ <includeType>2</includeType>
+ <excludeDirectories/>
+ <excludeFiles/>
+ <excludeDirectoriesWildcard/>
+ <excludeFilesWildcard/>
+</BackupDirectoryConfig>
+</value>
+</backupDirectories>
+ <reportSummaries>0</reportSummaries>
+ <reportLogs>0</reportLogs>
+ </BackupJobConfig>
+ </value>
+ </backupJobs>
+ </BucketConfig>
+ </value>
+</backupJobs>
+</BucketConfig>
+</value>
+</buckets>
+<loginTicket modified="1">inv7r8ZfW/AKso71kvf1PGEFpv/quFeVDPhh1JqthWZlkmf4uRBWsQTMi615+ux3oRL61YUv4IM9L1cYnT3dnAsLplwgoxHauPZwVXCIBInUxF8MMQwm0ErLSURzfyZ/</loginTicket>
+<featureBits modified="1">573</featureBits>
+<enableDebugMode>0</enableDebugMode>
+</GlobalConfig>
+</configuration>

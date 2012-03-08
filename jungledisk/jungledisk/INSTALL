@@ -1,0 +1,245 @@
+Jungle Disk for Linux
+---------------------
+Jungle Disk for Linux allows you to mount your online storage directly on
+the local file system and access your files using any application. It also
+includes an automatic backup feature for securing your data offsite.
+
+Two versions of Jungle Disk for Linux are included:
+
+1. The GTK2-GUI binary is called "junglediskmonitor", or "junglediskworkgroup", 
+depending on your version of Jungle Disk (hereafter, "junglediskmonitor" 
+will be used to refer to both binaries). The Jungle Disk Monitor provides a 
+complete UI for configuration and status monitoring. It also supports automatic 
+backup, and can mount your online disks as virtual drives via FUSE.
+
+2. The CLI version is called "jungledisk". This command-line-only daemon was
+designed for headless servers and/or for use in fstab and cron jobs. "jungledisk" 
+supports file system mounting via FUSE, as well as automatic backup. Note that
+the CLI version has no user interface for creating the Jungle Disk settings file,
+so you may wish to use Jungle Disk Monitor to setup your online disks and backups, 
+then make a copy of the settings file for use with the CLI/daemon.
+
+Installation
+------------
+Mounting your Jungle Disk directly via the file system requires
+that you have the FUSE filesystem installed. You can install it
+from packages for your distribution or from source via:
+
+http://fuse.sourceforge.net/
+
+On Ubuntu you would run: apt-get install fuse-utils
+
+"junglediskmonitor" can be run from any directory, so you can
+leave it in your user directory or copy it to a directory in
+the path (e.g. /usr/bin)
+
+"jungledisk" can also be run from any directory. However, if you
+want to mount your disk from fstab, it MUST be located somewhere
+in the path (e.g. /usr/bin)
+
+Configuration
+-------------
+"junglediskmonitor" has a built-in configuration interface which will be
+shown the first time you run the application. After configuring, your
+settings will be saved under the "~/.jungledisk" directory.
+
+"jungledisk" does not provide a configuration interface and must be provided
+with a valid configuration file. We do not recommend creating your
+configuration by hand. Instead, use junglediskmonitor on another machine
+with a GUI, and copy the config file to your server. 
+
+If you do not have a Linux Desktop machine available, you can use the "USB"
+version of the Mac or Windows Jungle Disk Client to create a configuration
+file to use on your server. You cannot use a configuration file from the
+non-USB versions on Mac or Windows, as they encrypt their settings in a way
+that is not readable on Linux.
+
+The configuration file can be placed in ~/.jungledisk, or in /etc or another
+path, and you can specify the path to the file on the command line.
+The WebDAV interface to Jungle Disk is optional with the command line version.
+You can disable it by setting the ListenPort to 0 in the configuration.
+
+Running
+-------
+"junglediskmonitor" does not require any command line options to run (just
+double-click the file on your desktop)
+
+"jungledisk" does not require any command line options, but you can specify 
+the mount point and FUSE mount options on the command line if desired.
+
+If multiple online disks are configured in the configuration file, the mountpoint
+specified on the command line will override the mountpoint in the configuration
+file. For example:
+
+/usr/bin/jungledisk /mnt/jungledisk
+/usr/bin/jungledisk /mnt/s3 --config /etc/jungledisk-settings.xml
+
+If you get an error on startup or the application is not running, you
+may be missing a required library or the FUSE module may not be loaded.
+Run "ldd junglediskmonitor" from the a terminal to see if any libraries
+are missing.
+
+To load the FUSE module, run "modprobe fuse" as root. Instructions for
+loading the FUSE module at boot are included below in the fstab section.
+
+Running as non-root
+-------------------
+Both "jungledisk" and "junglediskmonitor" can be run by non-root users,
+however if you want to allow FUSE filesystem mounting you must grant
+appropriate permissions to:
+
+/dev/fuse (the fuse device driver)
+/usr/bin/fusermount (the fuse mount helper application)
+
+..as well as the actual mount point
+
+On some distributions you simply need to add the user to the "fuse"
+group. Otherwise you may need to run:
+chmod o+rw /dev/fuse
+chmod o+rw /usr/bin/fusermount
+
+If the /dev/fuse device does not exist, try "modprobe fuse". If the module 
+is not found, you do not have the FUSE filesystem installed.
+
+Using "junglediskmonitor"
+-------------------------
+If you have configured automatic mounting, your Jungle Disk will be mounted
+at the specified directory (default: ~/jungledisk). You can pass additional 
+FUSE parameters after the mount point in the configuration. For example:
+
+"/mnt/jungledisk -o allow_other"
+
+Note that if you are not a root user, you must have permission to use the 
+FUSE filesystem to mount your Jungle Disk (see above).
+
+Although less reliable than FUSE, you can also access the disk via any WebDAV 
+client:
+
+-- To connect to your Jungle Disk in KDE, just open a Konquerer window and type
+"webdav://localhost:2667/".  In GNOME, select "Connect to Server" under the
+Places menu. 
+-- Set the Service type to WebDAV (HTTP). 
+-- Enter "localhost" in the server and "2667" for the port. 
+
+Using "jungledisk"
+------------------
+To see a list of command-line options, type "jungledisk -h". If configured 
+correctly, your Jungle Disk will be mounted at the specified mount point. 
+
+To reload the configuration, run "killall -HUP jungledisk"
+
+To exit the application gracefully, run "killall -QUIT jungledisk". You can 
+also force an exit by unmounting the filesystem with umount. Note that if you
+unmount the filesystem with open file handles you will receive an error when
+trying to close the files. Also, you cannot re-mount the filesystem until all 
+handles are closed (this includes shells with a working directory inside the 
+mounted file system)
+
+If you have the WebDAV server enabled, you can view any background operations
+by loading: http://localhost:2667/~operations via a web browser or curl.
+
+Running from fstab
+------------------
+You can mount your filesystem via the fstab file by adding a line such as the
+one below (note how the path to the config file is specified as part of the 
+FUSE options.)
+
+jungledisk  /mnt/jungle  fuse  noauto,config=/path/to/jungledisk-settings.xml 0 0
+
+You can then mount your filesystem with "mount /mnt/jungle", or place this command
+somewhere in your boot process to mount the filesystem at boot time (after the
+network comes up).
+
+Note that jungledisk will mount all of your online disks that have been configured 
+with mount points. The first mount point will be set to the one specified in fstab, 
+but the remaining network drives will be mounted as found in your settings
+file.
+
+Jungledisk MUST be in your path to mount via fstab.
+
+Also, you must ensure that the FUSE module is loaded on boot. This varies
+by distribution. Some common ones:
+
+Debian / Ubuntu:
+echo "fuse" >> /etc/modules
+
+Gentoo:
+echo "fuse" >> /etc/modules.autoload.d/kernel-2.6
+
+Fedora:
+echo "/sbin/modprobe fuse" >> /etc/rc.local
+
+Suse:
+Edit /etc/sysconfig/kernel and add "fuse" to the MODULES_LOADED_ON_BOOT
+
+Access by other users
+---------------------
+By default the mounted path will only be available to the user who mounted it.
+
+If you want to allow root or other users to access the mount you need to use
+the FUSE options "-o allow_root" or "-o allow_other". You may also need to set
+the umask, as in "-o umask=007".
+
+These parameters can be specified in fstab or on the command line:
+
+(fstab)   jungledisk /mnt/mountpoint fuse defaults,noauto,user,config=/path/to/jungledisk-settings.xml,allow_other,umask=007 0 0
+(command) /mnt/mountpoint -o rw,umask=007,allow_other,default_permissions
+
+Alternatively, you can configure FUSE options in the configuration file after the 
+mountpoint path (similar to the way it is done on the command line). This approach
+is particularly useful when mounting multiple disks, since only the first disk will
+pick up the extra FUSE options specified on the command line or in fstab.
+
+Note: To allow the options to work for non-root users, be sure to add the option
+"user_allow_other" to your /etc/fuse.conf file.
+
+Using rsync with Jungle Disk
+----------------------------
+Once running and mounted on the local file system, you can use rsync to easily
+copy files to and from your S3 storage. Most rsync options should work fine,
+however for best performance we recommend using the --inplace option which
+avoids extra renames. 
+
+You should also use the --times (-t) option so that modification times are 
+replicated and used to detect changes. If you prefer not to replicate 
+modification times, you may want to use --checksum (-c) or --size-only to 
+prevent files from being re-copied on every run.
+
+Jungle Disk can preserve symlinks, devices, group/owner/permissions, and
+modification/creation times if those options are specified. Currently, 
+hard-links are not supported.
+
+Sample command lines:
+# copy all files and attributes (times/permissions/owners/links/etc)
+rsync -a --inplace /src/* /mnt/jungle
+
+# copy only normal files and preserve modification times
+rsync -t -r --inplace /src/* /mnt/jungle
+
+# copy only file data and use size to determine changes
+rsync -r --size-only --inplace /src/* /mnt/jungle
+
+Troubleshooting
+---------------
+"junglediskmonitor" logs all errors to the GUI. You can double-click an
+error for more details or right-click to copy to the clipboard.
+
+"jungledisk" logs all errors to /var/log/jungledisk.log when running
+as root, and ~/.jungledisk/jungledisk.log when running as non-root.
+Make sure you check the log file if your disk does not mount properly.
+
+If you encounter an error that you are unable to resolve, please visit our
+support site (support.jungledisk.com) where you can view the user manual,
+search our knowledge base and forums, or submit a support ticket.
+
+Jungle Disk includes several optimizations to improve performance by 
+delaying network activity until needed. In most cases this is transparent
+to applications.
+
+By default, Jungle Disk also assumes that when an application opens a file
+using the O_WRONLY mode it intends to write the entire file, so the previous
+file contents are not downloaded. This assumption holds true for many, but
+not all applications. 
+
+Note: You can disable these optimizations by passing "-s" on the jungledisk
+command line (currently only in the command line version).
